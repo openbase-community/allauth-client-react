@@ -1,10 +1,10 @@
-import Button from '../components/Button'
 import { useState } from 'react'
 import { getWebAuthnRequestOptionsForLogin, loginUsingWebAuthn } from '../lib/allauth'
 import {
   parseRequestOptionsFromJSON,
   get
 } from '@github/webauthn-json/browser-ponyfill'
+import Button from '../components/Button'
 
 export default function WebAuthnLoginButton (props) {
   const [response, setResponse] = useState({ fetching: false, content: null })
@@ -25,5 +25,14 @@ export default function WebAuthnLoginButton (props) {
     }
     setResponse((r) => { return { ...r, fetching: false } })
   }
-  return <Button onClick={submit}>{props.children}</Button>
+  const { children, disabled, ...buttonProps } = props
+  return (
+    <Button
+      {...buttonProps}
+      disabled={disabled || response.fetching}
+      onClick={submit}
+    >
+      {response.fetching ? 'Preparing passkey...' : children}
+    </Button>
+  )
 }

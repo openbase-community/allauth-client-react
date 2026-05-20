@@ -11,17 +11,25 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
+    "./allauth": {
+      "types": "./dist/allauth.d.ts",
+      "import": "./dist/allauth.js"
+    },
     "./auth": {
       "types": "./dist/auth/index.d.ts",
       "import": "./dist/auth/index.js"
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "scaffold",
+    "scripts",
+    "src"
   ],
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
+    "generate-auth-screens": "node ./scripts/generate-auth-screens.mjs",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {

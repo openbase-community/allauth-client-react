@@ -1,3 +1,3 @@
 export { AuthContextProvider } from './AuthContext'
 export { URLs, pathForPendingFlow, pathForFlow, AuthChangeRedirector, AuthenticatedRoute, AnonymousRoute } from './routing'
-export { useConfig, useAuth, useUser, useAuthStatus } from './hooks'
+export { AuthChangeEvent, useConfig, useAuth, useUser, useAuthInfo, useAuthChange, useAuthStatus } from './hooks'
