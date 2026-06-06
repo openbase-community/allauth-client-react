@@ -1,7 +1,7 @@
 export { default as Login } from "./account/Login";
 export { default as Logout } from "./account/Logout";
 export { AuthContextProvider } from "./auth/AuthContext";
-export { useConfig } from "./auth/hooks";
+export { useConfig, useFullUser } from "./auth/hooks";
 export { AnonymousRoute, AuthChangeRedirector } from "./auth/routing";
 export { default as Button } from "./components/Button";
 export { default as FormErrors } from "./components/FormErrors";

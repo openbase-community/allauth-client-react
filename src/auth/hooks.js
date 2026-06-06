@@ -14,6 +14,22 @@ export function useUser () {
   return authInfo(auth).user
 }
 
+export function useFullUser () {
+  const auth = useContext(AuthContext)?.auth
+  if (!auth) {
+    return { user: null, isLoading: true }
+  }
+
+  const info = authInfo(auth)
+  return {
+    user: info.user,
+    isLoading: false,
+    isAuthenticated: info.isAuthenticated,
+    requiresReauthentication: info.requiresReauthentication,
+    pendingFlow: info.pendingFlow
+  }
+}
+
 export function useAuthInfo () {
   const auth = useContext(AuthContext)?.auth
   return authInfo(auth)
