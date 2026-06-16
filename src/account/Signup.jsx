@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import FormErrors from '../components/FormErrors'
 import { signUp } from '../lib/allauth'
-import { Link } from 'react-router-dom'
-import { useConfig } from '../auth'
+import { Link, useNavigate } from 'react-router-dom'
+import { pathForPendingFlow, useConfig } from '../auth'
 import ProviderList from '../socialaccount/ProviderList'
 import Button from '../components/Button'
 
@@ -13,6 +13,7 @@ export default function Signup () {
   const [password2Errors, setPassword2Errors] = useState([])
   const [response, setResponse] = useState({ fetching: false, content: null })
   const config = useConfig()
+  const navigate = useNavigate()
   const hasProviders = config.data.socialaccount?.providers?.length > 0
 
   function submit () {
@@ -24,6 +25,10 @@ export default function Signup () {
     setResponse({ ...response, fetching: true })
     signUp({ email, password: password1 }).then((content) => {
       setResponse((r) => { return { ...r, content } })
+      const path = pathForPendingFlow(content)
+      if (path) {
+        navigate(path, { replace: true })
+      }
     }).catch((e) => {
       console.error(e)
       window.alert(e)

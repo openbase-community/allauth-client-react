@@ -3,11 +3,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
   FormErrors,
+  pathForPendingFlow,
   ProviderList,
   useConfig,
 } from "openbase-auth-client";
 import { signUp } from "openbase-auth-client/allauth";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { AuthDivider, AuthShell } from "../components/AuthShell";
 
@@ -18,6 +19,7 @@ export default function Signup() {
   const [password2Errors, setPassword2Errors] = useState([]);
   const [response, setResponse] = useState({ fetching: false, content: null });
   const config = useConfig();
+  const navigate = useNavigate();
   const hasProviders = config?.data?.socialaccount?.providers?.length > 0;
 
   function submit(event) {
@@ -33,6 +35,10 @@ export default function Signup() {
     signUp({ email, password: password1 })
       .then((content) => {
         setResponse((current) => ({ ...current, content }));
+        const path = pathForPendingFlow(content);
+        if (path) {
+          navigate(path, { replace: true });
+        }
       })
       .catch((error) => {
         console.error(error);

@@ -11,7 +11,12 @@ export { default as VerificationEmailSent } from "./account/VerificationEmailSen
 export { default as VerifyEmailByCode } from "./account/VerifyEmailByCode";
 export { AuthContextProvider } from "./auth/AuthContext";
 export { useConfig, useFullUser } from "./auth/hooks";
-export { AnonymousRoute, AuthChangeRedirector } from "./auth/routing";
+export {
+  AnonymousRoute,
+  AuthChangeRedirector,
+  pathForFlow,
+  pathForPendingFlow,
+} from "./auth/routing";
 export { default as Button } from "./components/Button";
 export { default as FormErrors } from "./components/FormErrors";
 export { default as useLogin } from "./hooks/useLogin";
