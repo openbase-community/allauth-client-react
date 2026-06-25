@@ -8,6 +8,21 @@ export const URLs = Object.freeze({
   LOGOUT_REDIRECT_URL: "/",
 });
 
+export function safeRedirectPath(next, fallback = URLs.LOGIN_REDIRECT_URL) {
+  if (!next) {
+    return fallback;
+  }
+  try {
+    const decoded = decodeURIComponent(next);
+    if (decoded.startsWith("/") && !decoded.startsWith("//")) {
+      return decoded;
+    }
+  } catch {
+    return fallback;
+  }
+  return fallback;
+}
+
 const flow2path = {};
 flow2path[Flows.LOGIN] = "/account/login";
 flow2path[Flows.LOGIN_BY_CODE] = "/account/login/code/confirm";
@@ -88,8 +103,10 @@ export function AuthChangeRedirector({ children }) {
   switch (event) {
     case AuthChangeEvent.LOGGED_OUT:
       return <Navigate to={URLs.LOGOUT_REDIRECT_URL} />;
-    case AuthChangeEvent.LOGGED_IN:
-      return <Navigate to={URLs.LOGIN_REDIRECT_URL} />;
+    case AuthChangeEvent.LOGGED_IN: {
+      const next = new URLSearchParams(location.search).get("next");
+      return <Navigate to={safeRedirectPath(next)} />;
+    }
     case AuthChangeEvent.REAUTHENTICATED: {
       const next = new URLSearchParams(location.search).get("next") || "/";
       return <Navigate to={next} />;
