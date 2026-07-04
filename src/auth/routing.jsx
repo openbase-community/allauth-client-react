@@ -8,6 +8,16 @@ export const URLs = Object.freeze({
   LOGOUT_REDIRECT_URL: "/",
 });
 
+// Server-rendered endpoints that live outside the SPA router. Post-login
+// redirects to these must be full page loads: a client-side <Navigate> would
+// route inside the SPA, drop the request (e.g. a pending OAuth authorize),
+// and strand the caller.
+const SERVER_PATH_PREFIXES = ["/o/"];
+
+export function isServerPath(path) {
+  return SERVER_PATH_PREFIXES.some((prefix) => path.startsWith(prefix));
+}
+
 export function safeRedirectPath(next, fallback = URLs.LOGIN_REDIRECT_URL) {
   if (!next) {
     return fallback;
@@ -105,7 +115,12 @@ export function AuthChangeRedirector({ children }) {
       return <Navigate to={URLs.LOGOUT_REDIRECT_URL} />;
     case AuthChangeEvent.LOGGED_IN: {
       const next = new URLSearchParams(location.search).get("next");
-      return <Navigate to={safeRedirectPath(next)} />;
+      const path = safeRedirectPath(next);
+      if (isServerPath(path)) {
+        window.location.assign(path);
+        return null;
+      }
+      return <Navigate to={path} />;
     }
     case AuthChangeEvent.REAUTHENTICATED: {
       const next = new URLSearchParams(location.search).get("next") || "/";
