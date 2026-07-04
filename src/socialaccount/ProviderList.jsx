@@ -2,6 +2,23 @@ import { useConfig } from '../auth'
 import { Client, redirectToProvider, settings } from '../lib/allauth'
 import GoogleOneTap from './GoogleOneTap'
 
+// Float the providers whose id is listed in `priorityIds` to the front, in the
+// order given; the (stable) sort keeps everything else in its original server
+// order. Opt-in: when `priorityIds` is empty/omitted the server order is
+// preserved unchanged, so existing consumers of this shared component are
+// unaffected.
+function orderProviders (providers, priorityIds) {
+  if (!priorityIds?.length) {
+    return providers
+  }
+  const priority = priorityIds.map(id => id.toLowerCase())
+  const rankOf = provider => {
+    const index = priority.indexOf(String(provider.id).toLowerCase())
+    return index === -1 ? priority.length : index
+  }
+  return [...providers].sort((a, b) => rankOf(a) - rankOf(b))
+}
+
 function getProviderIcon(providerId) {
   switch (providerId.toLowerCase()) {
     case 'google':
@@ -26,7 +43,10 @@ function getProviderIcon(providerId) {
 
 export default function ProviderList (props) {
   const config = useConfig()
-  const providers = config.data.socialaccount.providers
+  const providers = orderProviders(
+    config.data.socialaccount.providers,
+    props.priorityIds
+  )
   if (!providers.length) {
     return null
   }
