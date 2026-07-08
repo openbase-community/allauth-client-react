@@ -3,19 +3,24 @@ import {
   useLocation,
   Link
 } from 'react-router-dom'
-import { URLs, pathForPendingFlow, useAuthStatus } from '../auth'
+import { URLs, isServerPath, pathForPendingFlow, safeRedirectPath, useAuthStatus } from '../auth'
 
 export default function ProviderCallback () {
   const location = useLocation()
   const params = new URLSearchParams(location.search)
   const error = params.get('error')
+  const next = params.get('next')
   const [auth, status] = useAuthStatus()
 
   let url = URLs.LOGIN_URL
   if (status.isAuthenticated) {
-    url = URLs.LOGIN_REDIRECT_URL
+    url = safeRedirectPath(next)
   } else {
     url = pathForPendingFlow(auth) || url
+  }
+  if (isServerPath(url)) {
+    window.location.assign(url)
+    return null
   }
   if (!error) {
     return <Navigate to={url} />

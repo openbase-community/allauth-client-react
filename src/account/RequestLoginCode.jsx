@@ -1,10 +1,11 @@
 import { useState } from 'react'
 import FormErrors from '../components/FormErrors'
 import { requestLoginCode } from '../lib/allauth'
-import { Navigate } from 'react-router-dom'
+import { Navigate, useLocation } from 'react-router-dom'
 import Button from '../components/Button'
 
 export default function RequestLoginCode () {
+  const location = useLocation()
   const [email, setEmail] = useState('')
   const [response, setResponse] = useState({ fetching: false, content: null })
 
@@ -21,7 +22,7 @@ export default function RequestLoginCode () {
   }
 
   if (response.content?.status === 401) {
-    return <Navigate to='/account/login/code/confirm' />
+    return <Navigate to={`/account/login/code/confirm${location.search}`} />
   }
   return (
     <div>

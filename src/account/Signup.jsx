@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import FormErrors from '../components/FormErrors'
 import { signUp } from '../lib/allauth'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { pathForPendingFlow, useConfig } from '../auth'
 import ProviderList from '../socialaccount/ProviderList'
 import Button from '../components/Button'
@@ -13,8 +13,11 @@ export default function Signup () {
   const [password2Errors, setPassword2Errors] = useState([])
   const [response, setResponse] = useState({ fetching: false, content: null })
   const config = useConfig()
+  const location = useLocation()
   const navigate = useNavigate()
   const hasProviders = config.data.socialaccount?.providers?.length > 0
+  const destinationQuery = location.search
+  const providerCallbackURL = `/account/provider/callback${destinationQuery}`
 
   function submit () {
     if (password2 !== password1) {
@@ -41,7 +44,7 @@ export default function Signup () {
     <div>
       <h1>Sign Up</h1>
       <p>
-        Already have an account? <Link to='/account/login'>Login here.</Link>
+        Already have an account? <Link to={`/account/login${destinationQuery}`}>Login here.</Link>
       </p>
 
       <FormErrors errors={response.content?.errors} />
@@ -56,12 +59,12 @@ export default function Signup () {
         <FormErrors param='password2' errors={password2Errors} />
       </div>
       <Button disabled={response.fetching} onClick={() => submit()}>Sign Up</Button>
-      <a href='/account/signup/passkey'>Sign up using a passkey</a>
+      <Link to={`/account/signup/passkey${destinationQuery}`}>Sign up using a passkey</Link>
 
       {hasProviders
         ? <>
           <h2>Or use a third-party</h2>
-          <ProviderList callbackURL='/account/provider/callback' />
+          <ProviderList callbackURL={providerCallbackURL} />
         </>
         : null}
     </div>

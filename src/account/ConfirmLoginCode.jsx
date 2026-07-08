@@ -1,11 +1,12 @@
 import { useState } from 'react'
 import FormErrors from '../components/FormErrors'
 import { confirmLoginCode, Flows } from '../lib/allauth'
-import { Navigate } from 'react-router-dom'
+import { Navigate, useLocation } from 'react-router-dom'
 import Button from '../components/Button'
 import { useAuthStatus } from '../auth'
 
 export default function ConfirmLoginCode () {
+  const location = useLocation()
   const [, authInfo] = useAuthStatus()
   const [code, setCode] = useState('')
   const [response, setResponse] = useState({ fetching: false, content: null })
@@ -23,7 +24,7 @@ export default function ConfirmLoginCode () {
   }
 
   if (response.content?.status === 409 || authInfo.pendingFlow?.id !== Flows.LOGIN_BY_CODE) {
-    return <Navigate to='/account/login/code' />
+    return <Navigate to={`/account/login/code${location.search}`} />
   }
   return (
     <div>
