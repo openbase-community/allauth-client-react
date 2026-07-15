@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { AuthenticatorType, Flows } from "../lib/allauth";
 import { AuthChangeEvent, useAuthChange, useAuthStatus } from "./hooks";
@@ -18,17 +19,30 @@ export function isServerPath(path) {
   return SERVER_PATH_PREFIXES.some((prefix) => path.startsWith(prefix));
 }
 
+function PostLoginRedirect() {
+  const location = useLocation();
+  const next = new URLSearchParams(location.search).get("next");
+  const path = safeRedirectPath(next);
+  const requiresFullPageLoad = isServerPath(path);
+
+  useEffect(() => {
+    if (requiresFullPageLoad) {
+      window.location.assign(path);
+    }
+  }, [path, requiresFullPageLoad]);
+
+  if (requiresFullPageLoad) {
+    return null;
+  }
+  return <Navigate to={path} replace />;
+}
+
 export function safeRedirectPath(next, fallback = URLs.LOGIN_REDIRECT_URL) {
   if (!next) {
     return fallback;
   }
-  try {
-    const decoded = decodeURIComponent(next);
-    if (decoded.startsWith("/") && !decoded.startsWith("//")) {
-      return decoded;
-    }
-  } catch {
-    return fallback;
+  if (next.startsWith("/") && !next.startsWith("//")) {
+    return next;
   }
   return fallback;
 }
@@ -103,7 +117,7 @@ export function AnonymousRoute({ children }) {
   if (!status.isAuthenticated) {
     return children;
   } else {
-    return <Navigate to={URLs.LOGIN_REDIRECT_URL} />;
+    return <PostLoginRedirect />;
   }
 }
 
@@ -113,15 +127,8 @@ export function AuthChangeRedirector({ children }) {
   switch (event) {
     case AuthChangeEvent.LOGGED_OUT:
       return <Navigate to={URLs.LOGOUT_REDIRECT_URL} />;
-    case AuthChangeEvent.LOGGED_IN: {
-      const next = new URLSearchParams(location.search).get("next");
-      const path = safeRedirectPath(next);
-      if (isServerPath(path)) {
-        window.location.assign(path);
-        return null;
-      }
-      return <Navigate to={path} />;
-    }
+    case AuthChangeEvent.LOGGED_IN:
+      return <PostLoginRedirect />;
     case AuthChangeEvent.REAUTHENTICATED: {
       const next = new URLSearchParams(location.search).get("next") || "/";
       return <Navigate to={next} />;
