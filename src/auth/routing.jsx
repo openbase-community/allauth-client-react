@@ -143,7 +143,11 @@ export function AuthChangeRedirector({ children }) {
     case AuthChangeEvent.FLOW_UPDATED:
       const pendingFlow = navigateToPendingFlow(auth);
       if (!pendingFlow) {
-        throw new Error();
+        throw new Error(
+          `FLOW_UPDATED auth event had no pending flow to navigate to; flows: ${JSON.stringify(
+            auth?.data?.flows ?? null
+          )}`
+        );
       }
       return pendingFlow;
     default:

@@ -62,14 +62,6 @@ function createRouter(config) {
         </AuthChangeRedirector>
       ),
       children: [
-        // {
-        //   path: '/',
-        //   element: <Home />
-        // },
-        // {
-        //   path: '/calculator',
-        //   element: <Calculator />
-        // },
         {
           path: "/account/login",
           element: (
