@@ -2,9 +2,10 @@ import { useEffect } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { AuthenticatorType, Flows } from "../lib/allauth";
 import { AuthChangeEvent, useAuthChange, useAuthStatus } from "./hooks";
+import { ACCOUNT_PATHS } from "./paths";
 
 export const URLs = Object.freeze({
-  LOGIN_URL: "/account/login",
+  LOGIN_URL: ACCOUNT_PATHS.LOGIN,
   LOGIN_REDIRECT_URL: "/dashboard",
   LOGOUT_REDIRECT_URL: "/",
 });
@@ -48,27 +49,27 @@ export function safeRedirectPath(next, fallback = URLs.LOGIN_REDIRECT_URL) {
 }
 
 const flow2path = {};
-flow2path[Flows.LOGIN] = "/account/login";
-flow2path[Flows.LOGIN_BY_CODE] = "/account/login/code/confirm";
-flow2path[Flows.SIGNUP] = "/account/signup";
-flow2path[Flows.VERIFY_EMAIL] = "/account/verify-email";
-flow2path[Flows.PASSWORD_RESET_BY_CODE] = "/account/password/reset/confirm";
-flow2path[Flows.PROVIDER_SIGNUP] = "/account/provider/signup";
-flow2path[Flows.REAUTHENTICATE] = "/account/reauthenticate";
-flow2path[Flows.MFA_TRUST] = "/account/2fa/trust";
+flow2path[Flows.LOGIN] = ACCOUNT_PATHS.LOGIN;
+flow2path[Flows.LOGIN_BY_CODE] = ACCOUNT_PATHS.LOGIN_CODE_CONFIRM;
+flow2path[Flows.SIGNUP] = ACCOUNT_PATHS.SIGNUP;
+flow2path[Flows.VERIFY_EMAIL] = ACCOUNT_PATHS.VERIFY_EMAIL;
+flow2path[Flows.PASSWORD_RESET_BY_CODE] = ACCOUNT_PATHS.PASSWORD_RESET_CONFIRM;
+flow2path[Flows.PROVIDER_SIGNUP] = ACCOUNT_PATHS.PROVIDER_SIGNUP;
+flow2path[Flows.REAUTHENTICATE] = ACCOUNT_PATHS.REAUTHENTICATE;
+flow2path[Flows.MFA_TRUST] = ACCOUNT_PATHS.MFA_TRUST;
 flow2path[`${Flows.MFA_AUTHENTICATE}:${AuthenticatorType.TOTP}`] =
-  "/account/authenticate/totp";
+  ACCOUNT_PATHS.AUTHENTICATE_TOTP;
 flow2path[`${Flows.MFA_AUTHENTICATE}:${AuthenticatorType.RECOVERY_CODES}`] =
-  "/account/authenticate/recovery-codes";
+  ACCOUNT_PATHS.AUTHENTICATE_RECOVERY_CODES;
 flow2path[`${Flows.MFA_AUTHENTICATE}:${AuthenticatorType.WEBAUTHN}`] =
-  "/account/authenticate/webauthn";
+  ACCOUNT_PATHS.AUTHENTICATE_WEBAUTHN;
 flow2path[`${Flows.MFA_REAUTHENTICATE}:${AuthenticatorType.TOTP}`] =
-  "/account/reauthenticate/totp";
+  ACCOUNT_PATHS.REAUTHENTICATE_TOTP;
 flow2path[`${Flows.MFA_REAUTHENTICATE}:${AuthenticatorType.RECOVERY_CODES}`] =
-  "/account/reauthenticate/recovery-codes";
+  ACCOUNT_PATHS.REAUTHENTICATE_RECOVERY_CODES;
 flow2path[`${Flows.MFA_REAUTHENTICATE}:${AuthenticatorType.WEBAUTHN}`] =
-  "/account/reauthenticate/webauthn";
-flow2path[Flows.MFA_WEBAUTHN_SIGNUP] = "/account/signup/passkey/create";
+  ACCOUNT_PATHS.REAUTHENTICATE_WEBAUTHN;
+flow2path[Flows.MFA_WEBAUTHN_SIGNUP] = ACCOUNT_PATHS.SIGNUP_PASSKEY_CREATE;
 
 export function pathForFlow(flow, typ) {
   let key = flow.id;

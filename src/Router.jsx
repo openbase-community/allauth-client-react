@@ -25,6 +25,7 @@ import {
   AnonymousRoute,
   AuthChangeRedirector,
   AuthenticatedRoute,
+  ACCOUNT_PATHS,
 } from "./auth";
 import { useConfig } from "./auth/hooks";
 import ActivateTOTP, { loader as activateTOTPLoader } from "./mfa/ActivateTOTP";
@@ -63,7 +64,7 @@ function createRouter(config) {
       ),
       children: [
         {
-          path: "/account/login",
+          path: ACCOUNT_PATHS.LOGIN,
           element: (
             <AnonymousRoute>
               <Login />
@@ -71,7 +72,7 @@ function createRouter(config) {
           ),
         },
         {
-          path: "/account/login/code",
+          path: ACCOUNT_PATHS.LOGIN_CODE,
           element: (
             <AnonymousRoute>
               <RequestLoginCode />
@@ -79,7 +80,7 @@ function createRouter(config) {
           ),
         },
         {
-          path: "/account/login/code/confirm",
+          path: ACCOUNT_PATHS.LOGIN_CODE_CONFIRM,
           element: (
             <AnonymousRoute>
               <ConfirmLoginCode />
@@ -87,7 +88,7 @@ function createRouter(config) {
           ),
         },
         {
-          path: "/account/email",
+          path: ACCOUNT_PATHS.EMAIL,
           element: (
             <AuthenticatedRoute>
               <ChangeEmail />
@@ -95,15 +96,15 @@ function createRouter(config) {
           ),
         },
         {
-          path: "/account/logout",
+          path: ACCOUNT_PATHS.LOGOUT,
           element: <Logout />,
         },
         {
-          path: "/account/provider/callback",
+          path: ACCOUNT_PATHS.PROVIDER_CALLBACK,
           element: <ProviderCallback />,
         },
         {
-          path: "/account/provider/signup",
+          path: ACCOUNT_PATHS.PROVIDER_SIGNUP,
           element: (
             <AnonymousRoute>
               <ProviderSignup />
@@ -111,7 +112,7 @@ function createRouter(config) {
           ),
         },
         {
-          path: "/account/providers",
+          path: ACCOUNT_PATHS.PROVIDERS,
           element: (
             <AuthenticatedRoute>
               <ManageProviders />
@@ -119,7 +120,7 @@ function createRouter(config) {
           ),
         },
         {
-          path: "/account/signup",
+          path: ACCOUNT_PATHS.SIGNUP,
           element: (
             <AnonymousRoute>
               <Signup />
@@ -127,7 +128,7 @@ function createRouter(config) {
           ),
         },
         {
-          path: "/account/signup/passkey",
+          path: ACCOUNT_PATHS.SIGNUP_PASSKEY,
           element: (
             <AnonymousRoute>
               <SignupByPasskey />
@@ -135,7 +136,7 @@ function createRouter(config) {
           ),
         },
         {
-          path: "/account/signup/passkey/create",
+          path: ACCOUNT_PATHS.SIGNUP_PASSKEY_CREATE,
           element: (
             <AnonymousRoute>
               <CreateSignupPasskey />
@@ -143,7 +144,7 @@ function createRouter(config) {
           ),
         },
         {
-          path: "/account/verify-email",
+          path: ACCOUNT_PATHS.VERIFY_EMAIL,
           element: config.data.account.email_verification_by_code_enabled ? (
             <VerifyEmailByCode />
           ) : (
@@ -151,12 +152,12 @@ function createRouter(config) {
           ),
         },
         {
-          path: "/account/verify-email/:key",
+          path: ACCOUNT_PATHS.VERIFY_EMAIL_KEY,
           element: <VerifyEmail />,
           loader: verifyEmailLoader,
         },
         {
-          path: "/account/password/reset",
+          path: ACCOUNT_PATHS.PASSWORD_RESET,
           element: (
             <AnonymousRoute>
               <RequestPasswordReset />
@@ -164,7 +165,7 @@ function createRouter(config) {
           ),
         },
         {
-          path: "/account/password/reset/confirm",
+          path: ACCOUNT_PATHS.PASSWORD_RESET_CONFIRM,
           element: (
             <AnonymousRoute>
               <ConfirmPasswordResetCode />
@@ -172,7 +173,7 @@ function createRouter(config) {
           ),
         },
         {
-          path: "/account/password/reset/complete",
+          path: ACCOUNT_PATHS.PASSWORD_RESET_COMPLETE,
           element: (
             <AnonymousRoute>
               <ResetPasswordByCode />
@@ -180,7 +181,7 @@ function createRouter(config) {
           ),
         },
         {
-          path: "/account/password/reset/key/:key",
+          path: ACCOUNT_PATHS.PASSWORD_RESET_KEY,
           element: (
             <AnonymousRoute>
               <ResetPasswordByLink />
@@ -189,7 +190,7 @@ function createRouter(config) {
           loader: resetPasswordByLinkLoader,
         },
         {
-          path: "/account/password/change",
+          path: ACCOUNT_PATHS.PASSWORD_CHANGE,
           element: (
             <AuthenticatedRoute>
               <ChangePassword />
@@ -197,7 +198,7 @@ function createRouter(config) {
           ),
         },
         {
-          path: "/account/2fa",
+          path: ACCOUNT_PATHS.MFA,
           element: (
             <AuthenticatedRoute>
               <MFAOverview />
@@ -206,7 +207,7 @@ function createRouter(config) {
           loader: mfaOverviewLoader,
         },
         {
-          path: "/account/reauthenticate",
+          path: ACCOUNT_PATHS.REAUTHENTICATE,
           element: (
             <AuthenticatedRoute>
               <Reauthenticate />
@@ -214,7 +215,7 @@ function createRouter(config) {
           ),
         },
         {
-          path: "/account/reauthenticate/totp",
+          path: ACCOUNT_PATHS.REAUTHENTICATE_TOTP,
           element: (
             <AuthenticatedRoute>
               <ReauthenticateTOTP />
@@ -222,7 +223,7 @@ function createRouter(config) {
           ),
         },
         {
-          path: "/account/reauthenticate/recovery-codes",
+          path: ACCOUNT_PATHS.REAUTHENTICATE_RECOVERY_CODES,
           element: (
             <AuthenticatedRoute>
               <ReauthenticateRecoveryCodes />
@@ -230,7 +231,7 @@ function createRouter(config) {
           ),
         },
         {
-          path: "/account/reauthenticate/webauthn",
+          path: ACCOUNT_PATHS.REAUTHENTICATE_WEBAUTHN,
           element: (
             <AuthenticatedRoute>
               <ReauthenticateWebAuthn />
@@ -238,7 +239,7 @@ function createRouter(config) {
           ),
         },
         {
-          path: "/account/authenticate/totp",
+          path: ACCOUNT_PATHS.AUTHENTICATE_TOTP,
           element: (
             <AnonymousRoute>
               <AuthenticateTOTP />
@@ -246,7 +247,7 @@ function createRouter(config) {
           ),
         },
         {
-          path: "/account/2fa/trust",
+          path: ACCOUNT_PATHS.MFA_TRUST,
           element: (
             <AnonymousRoute>
               <Trust />
@@ -254,7 +255,7 @@ function createRouter(config) {
           ),
         },
         {
-          path: "/account/authenticate/recovery-codes",
+          path: ACCOUNT_PATHS.AUTHENTICATE_RECOVERY_CODES,
           element: (
             <AnonymousRoute>
               <AuthenticateRecoveryCodes />
@@ -262,7 +263,7 @@ function createRouter(config) {
           ),
         },
         {
-          path: "/account/authenticate/webauthn",
+          path: ACCOUNT_PATHS.AUTHENTICATE_WEBAUTHN,
           element: (
             <AnonymousRoute>
               <AuthenticateWebAuthn />
@@ -270,7 +271,7 @@ function createRouter(config) {
           ),
         },
         {
-          path: "/account/2fa/totp/activate",
+          path: ACCOUNT_PATHS.MFA_TOTP_ACTIVATE,
           element: (
             <AuthenticatedRoute>
               <ActivateTOTP />
@@ -279,7 +280,7 @@ function createRouter(config) {
           loader: activateTOTPLoader,
         },
         {
-          path: "/account/2fa/totp/deactivate",
+          path: ACCOUNT_PATHS.MFA_TOTP_DEACTIVATE,
           element: (
             <AuthenticatedRoute>
               <DeactivateTOTP />
@@ -287,7 +288,7 @@ function createRouter(config) {
           ),
         },
         {
-          path: "/account/2fa/recovery-codes",
+          path: ACCOUNT_PATHS.MFA_RECOVERY_CODES,
           element: (
             <AuthenticatedRoute>
               <RecoveryCodes />
@@ -296,7 +297,7 @@ function createRouter(config) {
           loader: recoveryCodesLoader,
         },
         {
-          path: "/account/2fa/recovery-codes/generate",
+          path: ACCOUNT_PATHS.MFA_RECOVERY_CODES_GENERATE,
           element: (
             <AuthenticatedRoute>
               <GenerateRecoveryCodes />
@@ -305,7 +306,7 @@ function createRouter(config) {
           loader: generateRecoveryCodesLoader,
         },
         {
-          path: "/account/2fa/webauthn",
+          path: ACCOUNT_PATHS.MFA_WEBAUTHN,
           element: (
             <AuthenticatedRoute>
               <ListWebAuthn />
@@ -314,7 +315,7 @@ function createRouter(config) {
           loader: listWebAuthnLoader,
         },
         {
-          path: "/account/2fa/webauthn/add",
+          path: ACCOUNT_PATHS.MFA_WEBAUTHN_ADD,
           element: (
             <AuthenticatedRoute>
               <AddWebAuthn />
@@ -322,7 +323,7 @@ function createRouter(config) {
           ),
         },
         {
-          path: "/account/sessions",
+          path: ACCOUNT_PATHS.SESSIONS,
           element: (
             <AuthenticatedRoute>
               <Sessions />

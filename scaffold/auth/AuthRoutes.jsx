@@ -18,6 +18,7 @@ import VerificationEmailSent from "./account/VerificationEmailSent";
 import VerifyEmail, { loader as verifyEmailLoader } from "./account/VerifyEmail";
 import VerifyEmailByCode from "./account/VerifyEmailByCode";
 import {
+  ACCOUNT_PATHS,
   AnonymousRoute,
   AuthenticatedRoute,
 } from "openbase-auth-client/auth";
@@ -48,7 +49,7 @@ export function createAuthRoutes(config) {
   return (
     <>
       <Route
-        path="/account/login"
+        path={ACCOUNT_PATHS.LOGIN}
         element={
           <AnonymousRoute>
             <Login />
@@ -56,7 +57,7 @@ export function createAuthRoutes(config) {
         }
       />
       <Route
-        path="/account/login/code"
+        path={ACCOUNT_PATHS.LOGIN_CODE}
         element={
           <AnonymousRoute>
             <RequestLoginCode />
@@ -64,7 +65,7 @@ export function createAuthRoutes(config) {
         }
       />
       <Route
-        path="/account/login/code/confirm"
+        path={ACCOUNT_PATHS.LOGIN_CODE_CONFIRM}
         element={
           <AnonymousRoute>
             <ConfirmLoginCode />
@@ -72,17 +73,17 @@ export function createAuthRoutes(config) {
         }
       />
       <Route
-        path="/account/email"
+        path={ACCOUNT_PATHS.EMAIL}
         element={
           <AuthenticatedRoute>
             <ChangeEmail />
           </AuthenticatedRoute>
         }
       />
-      <Route path="/account/logout" element={<Logout />} />
-      <Route path="/account/provider/callback" element={<ProviderCallback />} />
+      <Route path={ACCOUNT_PATHS.LOGOUT} element={<Logout />} />
+      <Route path={ACCOUNT_PATHS.PROVIDER_CALLBACK} element={<ProviderCallback />} />
       <Route
-        path="/account/provider/signup"
+        path={ACCOUNT_PATHS.PROVIDER_SIGNUP}
         element={
           <AnonymousRoute>
             <ProviderSignup />
@@ -90,7 +91,7 @@ export function createAuthRoutes(config) {
         }
       />
       <Route
-        path="/account/providers"
+        path={ACCOUNT_PATHS.PROVIDERS}
         element={
           <AuthenticatedRoute>
             <ManageProviders />
@@ -98,7 +99,7 @@ export function createAuthRoutes(config) {
         }
       />
       <Route
-        path="/account/signup"
+        path={ACCOUNT_PATHS.SIGNUP}
         element={
           <AnonymousRoute>
             <Signup />
@@ -106,7 +107,7 @@ export function createAuthRoutes(config) {
         }
       />
       <Route
-        path="/account/signup/passkey"
+        path={ACCOUNT_PATHS.SIGNUP_PASSKEY}
         element={
           <AnonymousRoute>
             <SignupByPasskey />
@@ -114,7 +115,7 @@ export function createAuthRoutes(config) {
         }
       />
       <Route
-        path="/account/signup/passkey/create"
+        path={ACCOUNT_PATHS.SIGNUP_PASSKEY_CREATE}
         element={
           <AnonymousRoute>
             <CreateSignupPasskey />
@@ -122,7 +123,7 @@ export function createAuthRoutes(config) {
         }
       />
       <Route
-        path="/account/verify-email"
+        path={ACCOUNT_PATHS.VERIFY_EMAIL}
         element={
           config.data.account.email_verification_by_code_enabled ? (
             <VerifyEmailByCode />
@@ -132,12 +133,12 @@ export function createAuthRoutes(config) {
         }
       />
       <Route
-        path="/account/verify-email/:key"
+        path={ACCOUNT_PATHS.VERIFY_EMAIL_KEY}
         element={<VerifyEmail />}
         loader={verifyEmailLoader}
       />
       <Route
-        path="/account/password/reset"
+        path={ACCOUNT_PATHS.PASSWORD_RESET}
         element={
           <AnonymousRoute>
             <RequestPasswordReset />
@@ -145,7 +146,7 @@ export function createAuthRoutes(config) {
         }
       />
       <Route
-        path="/account/password/reset/confirm"
+        path={ACCOUNT_PATHS.PASSWORD_RESET_CONFIRM}
         element={
           <AnonymousRoute>
             <ConfirmPasswordResetCode />
@@ -153,7 +154,7 @@ export function createAuthRoutes(config) {
         }
       />
       <Route
-        path="/account/password/reset/complete"
+        path={ACCOUNT_PATHS.PASSWORD_RESET_COMPLETE}
         element={
           <AnonymousRoute>
             <ResetPasswordByCode />
@@ -161,7 +162,7 @@ export function createAuthRoutes(config) {
         }
       />
       <Route
-        path="/account/password/reset/key/:key"
+        path={ACCOUNT_PATHS.PASSWORD_RESET_KEY}
         element={
           <AnonymousRoute>
             <ResetPasswordByLink />
@@ -170,7 +171,7 @@ export function createAuthRoutes(config) {
         loader={resetPasswordByLinkLoader}
       />
       <Route
-        path="/account/password/change"
+        path={ACCOUNT_PATHS.PASSWORD_CHANGE}
         element={
           <AuthenticatedRoute>
             <ChangePassword />
@@ -178,7 +179,7 @@ export function createAuthRoutes(config) {
         }
       />
       <Route
-        path="/account/2fa"
+        path={ACCOUNT_PATHS.MFA}
         element={
           <AuthenticatedRoute>
             <MFAOverview />
@@ -187,7 +188,7 @@ export function createAuthRoutes(config) {
         loader={mfaOverviewLoader}
       />
       <Route
-        path="/account/reauthenticate"
+        path={ACCOUNT_PATHS.REAUTHENTICATE}
         element={
           <AuthenticatedRoute>
             <Reauthenticate />
@@ -195,7 +196,7 @@ export function createAuthRoutes(config) {
         }
       />
       <Route
-        path="/account/reauthenticate/totp"
+        path={ACCOUNT_PATHS.REAUTHENTICATE_TOTP}
         element={
           <AuthenticatedRoute>
             <ReauthenticateTOTP />
@@ -203,7 +204,7 @@ export function createAuthRoutes(config) {
         }
       />
       <Route
-        path="/account/reauthenticate/recovery-codes"
+        path={ACCOUNT_PATHS.REAUTHENTICATE_RECOVERY_CODES}
         element={
           <AuthenticatedRoute>
             <ReauthenticateRecoveryCodes />
@@ -211,7 +212,7 @@ export function createAuthRoutes(config) {
         }
       />
       <Route
-        path="/account/reauthenticate/webauthn"
+        path={ACCOUNT_PATHS.REAUTHENTICATE_WEBAUTHN}
         element={
           <AuthenticatedRoute>
             <ReauthenticateWebAuthn />
@@ -219,7 +220,7 @@ export function createAuthRoutes(config) {
         }
       />
       <Route
-        path="/account/2fa/webauthn/add"
+        path={ACCOUNT_PATHS.MFA_WEBAUTHN_ADD}
         element={
           <AuthenticatedRoute>
             <AddWebAuthn />
@@ -227,7 +228,7 @@ export function createAuthRoutes(config) {
         }
       />
       <Route
-        path="/account/2fa/webauthn"
+        path={ACCOUNT_PATHS.MFA_WEBAUTHN}
         element={
           <AuthenticatedRoute>
             <ListWebAuthn />
@@ -236,7 +237,7 @@ export function createAuthRoutes(config) {
         loader={listWebAuthnLoader}
       />
       <Route
-        path="/account/2fa/totp/activate"
+        path={ACCOUNT_PATHS.MFA_TOTP_ACTIVATE}
         element={
           <AuthenticatedRoute>
             <ActivateTOTP />
@@ -245,7 +246,7 @@ export function createAuthRoutes(config) {
         loader={activateTOTPLoader}
       />
       <Route
-        path="/account/2fa/totp/deactivate"
+        path={ACCOUNT_PATHS.MFA_TOTP_DEACTIVATE}
         element={
           <AuthenticatedRoute>
             <DeactivateTOTP />
@@ -253,7 +254,7 @@ export function createAuthRoutes(config) {
         }
       />
       <Route
-        path="/account/2fa/recovery-codes"
+        path={ACCOUNT_PATHS.MFA_RECOVERY_CODES}
         element={
           <AuthenticatedRoute>
             <RecoveryCodes />
@@ -262,7 +263,7 @@ export function createAuthRoutes(config) {
         loader={recoveryCodesLoader}
       />
       <Route
-        path="/account/2fa/recovery-codes/generate"
+        path={ACCOUNT_PATHS.MFA_RECOVERY_CODES_GENERATE}
         element={
           <AuthenticatedRoute>
             <GenerateRecoveryCodes />
@@ -271,23 +272,23 @@ export function createAuthRoutes(config) {
         loader={generateRecoveryCodesLoader}
       />
       <Route
-        path="/account/authenticate/totp"
+        path={ACCOUNT_PATHS.AUTHENTICATE_TOTP}
         element={<AuthenticateTOTP />}
       />
       <Route
-        path="/account/authenticate/recovery-codes"
+        path={ACCOUNT_PATHS.AUTHENTICATE_RECOVERY_CODES}
         element={<AuthenticateRecoveryCodes />}
       />
       <Route
-        path="/account/authenticate/webauthn"
+        path={ACCOUNT_PATHS.AUTHENTICATE_WEBAUTHN}
         element={<AuthenticateWebAuthn />}
       />
       <Route
-        path="/account/trust"
+        path={ACCOUNT_PATHS.MFA_TRUST}
         element={<Trust />}
       />
       <Route
-        path="/account/sessions"
+        path={ACCOUNT_PATHS.SESSIONS}
         element={
           <AuthenticatedRoute>
             <Sessions />
