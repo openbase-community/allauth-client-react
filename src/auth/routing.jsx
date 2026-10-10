@@ -20,10 +20,14 @@ export function isServerPath(path) {
   return SERVER_PATH_PREFIXES.some((prefix) => path.startsWith(prefix));
 }
 
-function PostLoginRedirect() {
+/**
+ * Sends a freshly signed-in user to `?next=`, or to `fallback` without one.
+ * @param {{ fallback?: string }} [props]
+ */
+export function PostLoginRedirect({ fallback = URLs.LOGIN_REDIRECT_URL } = {}) {
   const location = useLocation();
   const next = new URLSearchParams(location.search).get("next");
-  const path = safeRedirectPath(next);
+  const path = safeRedirectPath(next, fallback);
   const requiresFullPageLoad = isServerPath(path);
 
   useEffect(() => {
