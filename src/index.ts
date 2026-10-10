@@ -16,6 +16,7 @@ export {
   AuthChangeRedirector,
   pathForFlow,
   pathForPendingFlow,
+  withNextQuery,
 } from "./auth/routing";
 export { default as Button } from "./components/Button";
 export { default as FormErrors } from "./components/FormErrors";

@@ -92,10 +92,22 @@ export function pathForPendingFlow(auth) {
   return null;
 }
 
-function navigateToPendingFlow(auth) {
+// Carries the caller's `?next=` destination onto another account path, so a
+// multi-step flow (login by code, signup, email verification, MFA) still ends
+// where it started, e.g. a pending OAuth authorize for the CLI.
+export function withNextQuery(path, search) {
+  const next = new URLSearchParams(search).get("next");
+  if (!next) {
+    return path;
+  }
+  const separator = path.includes("?") ? "&" : "?";
+  return `${path}${separator}next=${encodeURIComponent(next)}`;
+}
+
+function navigateToPendingFlow(auth, location) {
   const path = pathForPendingFlow(auth);
   if (path) {
-    return <Navigate to={path} />;
+    return <Navigate to={withNextQuery(path, location.search)} />;
   }
   return null;
 }
@@ -142,7 +154,7 @@ export function AuthChangeRedirector({ children }) {
       return <Navigate to={`${path}?${next}`} state={{ reauth: auth }} />;
     }
     case AuthChangeEvent.FLOW_UPDATED:
-      const pendingFlow = navigateToPendingFlow(auth);
+      const pendingFlow = navigateToPendingFlow(auth, location);
       if (!pendingFlow) {
         throw new Error(
           `FLOW_UPDATED auth event had no pending flow to navigate to; flows: ${JSON.stringify(
