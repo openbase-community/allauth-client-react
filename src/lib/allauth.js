@@ -59,6 +59,7 @@ export const URLs = Object.freeze({
   RESET_PASSWORD: "/auth/password/reset",
   SIGNUP: "/auth/signup",
   VERIFY_EMAIL: "/auth/email/verify",
+  RESEND_EMAIL_VERIFICATION_CODE: "/auth/email/verify/resend",
 
   // Auth: 2FA
   MFA_AUTHENTICATE: "/auth/2fa/authenticate",
@@ -280,6 +281,10 @@ export async function requestEmailVerification(email) {
 
 export async function verifyEmail(key) {
   return await request("POST", URLs.VERIFY_EMAIL, { key });
+}
+
+export async function resendEmailVerificationCode() {
+  return await request("POST", URLs.RESEND_EMAIL_VERIFICATION_CODE);
 }
 
 export async function getPasswordReset(key) {
