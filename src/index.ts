@@ -6,6 +6,7 @@ export { AnonymousRoute, AuthChangeRedirector } from "./auth/routing";
 export { default as Button } from "./components/Button";
 export { default as FormErrors } from "./components/FormErrors";
 export { default as useLogin } from "./hooks/useLogin";
+export { Client, setup } from "./lib/allauth";
 export { logout } from "./lib/allauth";
 export { getCSRFToken } from "./lib/django";
 export { default as WebAuthnLoginButton } from "./mfa/WebAuthnLoginButton";

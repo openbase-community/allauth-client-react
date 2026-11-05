@@ -109,6 +109,31 @@ export function getSessionToken() {
   return tokenStorage.getItem("sessionToken");
 }
 
+function getCSRFUrl() {
+  const baseUrl = new URL(settings.baseUrl, window.location.origin);
+  return `${baseUrl.origin}/api/csrf/`;
+}
+
+async function getRequestCSRFToken() {
+  const existingToken = getCSRFToken();
+  if (existingToken) {
+    return existingToken;
+  }
+
+  const response = await fetch(getCSRFUrl(), {
+    method: "GET",
+    headers: {
+      ...ACCEPT_JSON,
+    },
+    credentials: settings.withCredentials ? "include" : "same-origin",
+  });
+  const payload = await response.json().catch(() => null);
+  if (payload && typeof payload.csrfToken === "string" && payload.csrfToken) {
+    return payload.csrfToken;
+  }
+  return getCSRFToken();
+}
+
 async function request(method, path, data, headers) {
   const options = {
     method,
@@ -123,7 +148,10 @@ async function request(method, path, data, headers) {
   // Don't pass along authentication related headers to the config endpoint.
   if (path !== URLs.CONFIG) {
     if (settings.client === Client.BROWSER) {
-      options.headers["X-CSRFToken"] = getCSRFToken();
+      const csrfToken = await getRequestCSRFToken();
+      if (csrfToken) {
+        options.headers["X-CSRFToken"] = csrfToken;
+      }
     } else if (settings.client === Client.APP) {
       // IMPORTANT!: Do NOT use `Client.APP` in a browser context, as you will
       // be vulnerable to CSRF attacks. This logic is only here for
@@ -312,17 +340,18 @@ export async function authenticateByToken(
   });
 }
 
-export function redirectToProvider(
+export async function redirectToProvider(
   providerId,
   callbackURL,
   process = AuthProcess.LOGIN,
 ) {
+  const csrfToken = await getRequestCSRFToken();
   postForm(URLs.REDIRECT_TO_PROVIDER, {
     provider: providerId,
     process,
     callback_url:
       window.location.protocol + "//" + window.location.host + callbackURL,
-    csrfmiddlewaretoken: getCSRFToken(),
+    csrfmiddlewaretoken: csrfToken ?? "",
   });
 }
 
